@@ -36,7 +36,7 @@ jobs:
       - name: Build executable with PyInstaller
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }} # Injeta nosso segredo no ambiente
-        run: pyinstaller --onefile --noconsole organizador_core.py
+        run: pyinstaller --onefile --noconsole app_ui.py
 
       # 5. Empacota o .exe final como um artefato para download
       - name: Upload artifact

@@ -1,0 +1,7 @@
+{
+  "Finanças": ["fatura", "boleto", "nf-e", "imposto", "recibo", "nota fiscal", "despesa"],
+  "Trabalho": ["relatorio", "apresentacao", "reuniao", "projeto", "sprint", "briefing"],
+  "Documentos Importantes": ["cpf", "rg", "contrato", "certidao", "passaporte", "cnh"],
+  "Estudos": ["artigo", "resumo", "tese", "aula", "exercicio", "bibliografia"],
+  "Mídia": ["foto", "video", "imagem", "captura de tela", "screenshot", "gravacao"]
+}

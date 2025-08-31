@@ -1,0 +1,46 @@
+# Nome do nosso workflow de automação
+name: Build Windows Executable
+
+# Gatilho: Este workflow irá rodar sempre que houver uma alteração na branch 'main'
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: # Permite acionar manualmente também
+
+jobs:
+  build:
+    # O robô irá usar a versão mais recente do Windows Server
+    runs-on: windows-latest
+
+    steps:
+      # 1. Clona o código do seu repositório para a máquina virtual
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Instala o Python na máquina virtual
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 3. Instala as dependências do nosso projeto
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller # Instala o compilador
+
+      # 4. Executa o PyInstaller para criar o .exe
+      # --onefile: cria um único executável
+      # --noconsole: não abre um terminal de texto ao executar o app (será uma app gráfica)
+      - name: Build executable with PyInstaller
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }} # Injeta nosso segredo no ambiente
+        run: pyinstaller --onefile --noconsole organizador_core.py
+
+      # 5. Empacota o .exe final como um artefato para download
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: organizador-ia-windows-exe
+          path: dist/organizador_core.exe

@@ -1,4 +1,4 @@
-# app_ui.py - VERSÃO FINAL 1.0
+# app_ui.py - VERSÃO 1.1 (FINAL + TEMA VISUAL)
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import os
@@ -6,24 +6,16 @@ import threading
 import queue
 import shutil
 from organizador_core import IACore
-
-# Função para encontrar as pastas padrão do usuário (sem alterações)
-def get_user_folders():
-    base_path = os.path.expanduser('~')
-    folders = {
-        "Documentos": os.path.join(base_path, 'Documents'),
-        "Downloads": os.path.join(base_path, 'Downloads'),
-        "Imagens": os.path.join(base_path, 'Pictures'),
-        "Vídeos": os.path.join(base_path, 'Videos'),
-        "Música": os.path.join(base_path, 'Music'),
-        "Área de Trabalho": os.path.join(base_path, 'Desktop')
-    }
-    return {name: path for name, path in folders.items() if os.path.exists(path)}
+import sv_ttk # NOVO: Importa a biblioteca do tema
 
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Organizador de Arquivos IA v1.0")
+        
+        # APLICA O TEMA VISUAL MODERNO
+        sv_ttk.set_theme("dark")
+
+        self.title("Organizador de Arquivos IA v1.1")
         self.geometry("600x450")
 
         self.ia_core = IACore()
@@ -32,6 +24,7 @@ class App(tk.Tk):
         main_frame = ttk.Frame(self, padding="10")
         main_frame.pack(fill="both", expand=True)
 
+        # (O restante do código permanece exatamente o mesmo da Página 36)
         # --- Seção de Pastas de Origem ---
         source_frame = ttk.LabelFrame(main_frame, text="1. Selecione as Pastas para Organizar", padding="10")
         source_frame.pack(fill="x", pady=5)
@@ -112,7 +105,7 @@ class App(tk.Tk):
                 
                 dest_category_path = os.path.join(dest_root, category)
                 os.makedirs(dest_category_path, exist_ok=True)
-                shutil.copy2(original_path, dest_category_path)
+                shutil.copy2(original_path, final_dest_path)
 
             self.queue.put("DONE")
         except Exception as e:
@@ -137,6 +130,19 @@ class App(tk.Tk):
             pass
         finally:
             self.after(100, self.process_queue)
+
+# Função para encontrar as pastas padrão do usuário (sem alterações)
+def get_user_folders():
+    base_path = os.path.expanduser('~')
+    folders = {
+        "Documentos": os.path.join(base_path, 'Documents'),
+        "Downloads": os.path.join(base_path, 'Downloads'),
+        "Imagens": os.path.join(base_path, 'Pictures'),
+        "Vídeos": os.path.join(base_path, 'Videos'),
+        "Música": os.path.join(base_path, 'Music'),
+        "Área de Trabalho": os.path.join(base_path, 'Desktop')
+    }
+    return {name: path for name, path in folders.items() if os.path.exists(path)}
 
 if __name__ == "__main__":
     app = App()
